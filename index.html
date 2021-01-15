@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Распределение работ между исполнителями </title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <label for="inputSize" class="form-label">Размерность задачи</label>
+            <input type="number" class="form-control" id="inputSize" placeholder="10">
+            <button type="button" class="btn btn-secondary mt-2" id="btnClear">Очистить</button>
+        </div>
+        <div class="col-6">
+            <label for="plannedDuration" class="form-label">Длительность планового периода</label>
+            <input type="number" class="form-control" id="plannedDuration" placeholder="20">
+            <button type="button" class="btn btn-primary mt-2" id="btnStart">Решить</button>
+        </div>
+        <div class="col-12 mt-2">
+            <label for="table-container-expenses" class="form-label">Матрица затрат</label>
+            <table id="table-container-expenses"></table>
+        </div>
+        <div class="col-12 mt-2">
+            <label for="table-container-times" class="form-label">Затрачиваемое время</label>
+            <table id="table-container-times"></table>
+        </div>
+    </div>
+    <div>
+        <div>
+
+        </div>
+    </div>
+</div>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="./src/main.css"/>
+<script src="src/main.js"></script>
+</body>
+</html>
