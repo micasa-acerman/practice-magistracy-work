@@ -6,7 +6,8 @@
   "author": "Micasa Acerman",
   "private": true,
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . myApp -all --app-version=0.1.0 --out=dist --ignore=dist --prune --scripts-prepend-node-path"
   },
   "keywords": [
     "js",
