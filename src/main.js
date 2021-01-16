@@ -1,6 +1,8 @@
 let $ = require('jquery');
 require('popper.js');
 require('bootstrap');
+const tables = require('./src/table')
+const {algorithm} = require("./src/algorithm");
 
 Object.defineProperty(Array.prototype, 'chunk', {
     value: function (chunkSize) {
@@ -13,53 +15,57 @@ Object.defineProperty(Array.prototype, 'chunk', {
     }
 });
 
+const getAssignedTasks = (variant) => {
+    const result = []
+    variant.forEach((item, index) => result[item] ? result[item].push(index) : result[item] = [index])
+    return result
+}
+
 $(document).ready(() => {
-    const $plannedDuration = $('#plannedDuration')
-    const $inputSize = $('#inputSize')
+    const $workersCount = $('#workers-count')
+    const $tasksCount = $('#tasks-count')
+    const $plannedDuration = $('#planned-duration')
     const $tableExpenses = $('#table-container-expenses')
     const $tableTimes = $('#table-container-times')
+    const $alertContainer = $('#alert-container')
 
-    /**
-     *  Создание таблицы по ее селектора n-ой размерности
-     * @param element - указатель на таблицу
-     * @param n - размерность таблицы
-     */
-    const createTable = (element, n) => {
-        element.find('tr').remove()
-        const rows = []
-        for (let i = 0; i < n; i++) {
-            const cells = []
-            for (let j = 0; j < n; j++) {
-                cells.push($(`<td class="cell cell-${i}-${j}"><input /></td>`))
-            }
-            rows.push($('<tr></tr>').append(cells))
-        }
-        element.append(rows)
-    }
+    // Слушатели событий
+    $('#clear').click(() => {
+        $tasksCount.val('').removeAttr('disabled');
+        $workersCount.val('').removeAttr('disabled');
+        $plannedDuration.val('').removeAttr('disabled');
 
-    const getTableValues = (element) => {
-        const array = element.find('input').map(function () {
-            return +this.value
-        })
-            .get()
-        return array.chunk(Math.sqrt(array.length))
-    }
-
-
-    $inputSize.change((event) => {
-        event.stopPropagation()
-
-        createTable($tableExpenses, event.target.value)
-        createTable($tableTimes, event.target.value)
+        tables.clearTable($tableExpenses)
+        tables.clearTable($tableTimes)
+        $('#build').removeAttr('disabled')
+        $('#clear,#start').attr('disabled', 'disabled')
     })
 
-    $('#btnClear').click(() => {
-        $inputSize.val('')
-        $plannedDuration.val('')
+    $('#build').click(() => {
+        const n = $tasksCount.val(), m = $workersCount.val();
+        tables.createTable($tableExpenses, n, m)
+        tables.createTable($tableTimes, n, m)
+
+        $tasksCount.attr('disabled', 'disabled')
+        $workersCount.attr('disabled', 'disabled')
+        $plannedDuration.attr('disabled', 'disabled')
+        $('#build').attr('disabled', 'disabled')
+        $('#clear,#start').removeAttr('disabled')
     })
-    $('#btnStart').click(() => {
-        const expenses = getTableValues($tableExpenses)
-        const times = getTableValues($tableTimes)
-        console.log('expenses', expenses)
+
+    $('#start').click(() => {
+        const expenses = tables.getTableValues($tableExpenses)
+        const times = tables.getTableValues($tableTimes)
+        const n = +$tasksCount.val(), m = +$workersCount.val(), T = +$plannedDuration.val();
+        const startTime = new Date();
+        const result = algorithm(n, m, expenses, times, T)
+        const delta = (new Date() - startTime) / 1000
+        $alertContainer.find('div').remove()
+        if (result.cost !== Number.MAX_SAFE_INTEGER)
+            $(`<div class="alert alert-success"><strong>Результат</strong> S=${result.cost},T=${result.time},распределение:${
+                getAssignedTasks(result.variant).map((item, index) => `Работник ${index + 1}={${item.map(x => x + 1).join(',')}}. Время работы: ${delta} сек.`)
+            }</div>`).appendTo($alertContainer)
+        else
+            $(`<div class="alert alert-danger">Нет решений</div>`).appendTo($alertContainer)
     })
 })

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Распределение работ между исполнителями </title>
@@ -8,15 +8,23 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-6">
-            <label for="inputSize" class="form-label">Размерность задачи</label>
-            <input type="number" class="form-control" id="inputSize" placeholder="10">
-            <button type="button" class="btn btn-secondary mt-2" id="btnClear">Очистить</button>
+        <div class="col-12 my-2" id="alert-container"></div>
+        <div class="col-4">
+            <label for="workers-count" class="form-label">Количество исполнителей</label>
+            <input type="number" class="form-control" id="workers-count" placeholder="10" autofocus>
         </div>
-        <div class="col-6">
-            <label for="plannedDuration" class="form-label">Длительность планового периода</label>
-            <input type="number" class="form-control" id="plannedDuration" placeholder="20">
-            <button type="button" class="btn btn-primary mt-2" id="btnStart">Решить</button>
+        <div class="col-4">
+            <label for="tasks-count" class="form-label">Количество задач</label>
+            <input type="number" class="form-control" id="tasks-count" placeholder="10">
+        </div>
+        <div class="col-4">
+            <label for="planned-duration" class="form-label">Планового период</label>
+            <input type="number" class="form-control" id="planned-duration" placeholder="20">
+        </div>
+        <div class="col-12">
+            <button type="button" class="btn btn-outline-primary mt-2" id="build">Построить</button>
+            <button type="button" class="btn btn-outline-danger mt-2" id="clear" disabled>Очистить</button>
+            <button type="button" class="btn btn-primary mt-2" id="start" disabled>Решить</button>
         </div>
         <div class="col-12 mt-2">
             <label for="table-container-expenses" class="form-label">Матрица затрат</label>
@@ -25,11 +33,6 @@
         <div class="col-12 mt-2">
             <label for="table-container-times" class="form-label">Затрачиваемое время</label>
             <table id="table-container-times"></table>
-        </div>
-    </div>
-    <div>
-        <div>
-
         </div>
     </div>
 </div>

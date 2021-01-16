@@ -1,4 +1,6 @@
 .cell input {
     width: 30px;
-    border: 1px solid #666
+    border: 1px solid #666;
+    border-radius: 20%;
+    text-align: center;
 }
